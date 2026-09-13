@@ -17,7 +17,7 @@ function LoginPage() {
         try{
             const data = await login(email, password);
             loginUser(data.token);
-        } catch (error)
+        } catch 
         {
             setError('Invalid email or password');
         }
