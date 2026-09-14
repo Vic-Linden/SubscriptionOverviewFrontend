@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { Card, Typography, TextField, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import { register } from './authApi';
 import { AuthContext } from './AuthContext';
@@ -51,6 +52,10 @@ function RegisterPage() {
                     <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 2 }}>
                         Submit
                     </Button>
+
+                    <Typography variant="body2" sx={{ textAlign: 'left', marginTop: 2 }}>
+                        <Link to="/login">Back</Link>
+                    </Typography>
                 </form>
             </Card>
         </div>
