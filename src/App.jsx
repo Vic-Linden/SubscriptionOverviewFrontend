@@ -1,8 +1,16 @@
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import LoginPage from './features/auth/LoginPage';
+import RegisterPage from './features/auth/RegisterPage';
+
+
 function App() {
   return (
-    <div>
-      <h1>Subscription Overview</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
