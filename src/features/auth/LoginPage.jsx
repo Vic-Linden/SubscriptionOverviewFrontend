@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
-import { Card, Typography, TextField, Button } from '@mui/material';
+import { Card, Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import { login } from './authApi';
 import { AuthContext } from './AuthContext';
@@ -22,7 +23,7 @@ function LoginPage() {
         }
     };
     return (
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh'}}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
             <Card sx={{ maxWidth: 400, padding: 4 }}>
                 <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
                     Login
@@ -46,11 +47,22 @@ function LoginPage() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <FormControlLabel control={<Checkbox />} label="Remember me" />
+                        <Typography variant="body2" sx={{ cursor: 'pointer' }}>
+                            Forgot password?
+                        </Typography>
+                    </div>
+
                     {error && <Typography color="error">{error}</Typography>}
 
                     <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 2 }}>
                         Login
                     </Button>
+
+                    <Typography variant="body2" sx={{ textAlign: 'center', marginTop: 2 }}>
+                        Don't have an account? <Link to="/register">Register</Link>
+                    </Typography>
                 </form>
             </Card>
         </div>
