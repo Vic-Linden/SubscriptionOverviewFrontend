@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { login } from './authApi';
 import { AuthContext } from './AuthContext';
+import bgImage from '../../assets/bg-mountain.avif';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -23,7 +24,16 @@ function LoginPage() {
         }
     };
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            backgroundImage: `url(${bgImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            
+        }}>
             <Card sx={{ maxWidth: 400, padding: 4 }}>
                 <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
                     Login
