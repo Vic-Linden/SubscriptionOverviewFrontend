@@ -7,6 +7,7 @@ import { AuthContext } from './AuthContext';
 import bgImage from '../../assets/bg-mountain.avif';
 
 function RegisterPage() {
+    const [displayUsername, setDisplayUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -17,7 +18,7 @@ function RegisterPage() {
         event.preventDefault();
 
         try {
-            const data = await register(email, password);
+            const data = await register(email, password, displayUsername);
             loginUser(data.token);
         } catch {
             setError('Email already in use.');
@@ -47,6 +48,14 @@ function RegisterPage() {
                 </Typography>
 
                 <form onSubmit={handleSubmit}>
+                    <TextField
+                        label="Username"
+                        fullWidth
+                        margin="normal"
+                        value={displayUsername}
+                        onChange={(e) => setDisplayUsername(e.target.value)}
+                    />
+
                     <TextField
                         label="Email"
                         fullWidth
