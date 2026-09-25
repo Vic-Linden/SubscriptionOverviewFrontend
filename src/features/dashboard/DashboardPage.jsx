@@ -29,6 +29,21 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
+            {/* TODO: replace with real data from GET /api/categories and GET /api/subscriptions */}
+            <Grid container spacing={4} sx={{ marginTop: 4 }}>
+                <Grid item xs={7}>
+                    <Typography variant="body1">No categories yet.</Typography>
+                </Grid>
+
+                <Grid item xs={5}>
+                    <Paper sx={{ padding: 2, textAlign: 'center' }}>
+                        <Typography variant="body2" color="text.secondary">
+                            Chart will appear here once you have subscriptions.
+                        </Typography>
+                    </Paper>
+                </Grid>
+            </Grid>
+
         </Box>
     );
 }
