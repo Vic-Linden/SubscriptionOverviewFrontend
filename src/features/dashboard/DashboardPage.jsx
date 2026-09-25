@@ -1,12 +1,13 @@
 import {useContext} from 'react';
+import {jwtDecode} from 'jwt-decode';
 import { Typography, Box} from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
 
 function DashboardPage(){
     const {token} = useContext(AuthContext);
 
-    //TODO: read username claim out of the token (currently hardcoded)
-    const username = 'User';
+    const decoded = token ? jwtDecode(token) : null;
+    const username = decoded?.username || 'User';
 
     return(
         <Box sx={{padding: 4}}>
