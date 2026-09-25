@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { Typography, Box, Grid, Paper } from '@mui/material';
+import { Typography, Box, Grid, Paper, Button } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
 
 function DashboardPage() {
@@ -43,6 +43,11 @@ function DashboardPage() {
                     </Paper>
                 </Grid>
             </Grid>
+
+            {/* TODO: open a create-subscription dialog on click */}
+            <Button variant="text" sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}>
+                + New Subscription
+            </Button>
 
         </Box>
     );
