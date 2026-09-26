@@ -16,7 +16,7 @@ import {
     MenuItem
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
-import { getCategories, createCategory, getCategoryById, updateCategory, deleteCategory } from '../categories/CategoryApi';
+import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
@@ -33,17 +33,20 @@ function DashboardPage() {
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
 
+    // Fetches all categories once when the page loads.
     useEffect(() => {
         getCategories()
             .then((data) => setCategories(data))
             .catch(() => setCategories([]));
     }, []);
 
+    // User logs out and sends them back to the login page. 
     const handleLogout = () => {
         logoutUser();
         navigate('/login');
     };
 
+    // Creates a new category, refreshes the list, reset and closes the dialog. 
     const handleCreateCategory = async () => {
         await createCategory(newCategoryName);
         const updated = await getCategories();
@@ -52,6 +55,7 @@ function DashboardPage() {
         setOpenDialog(false);
     };
 
+    // Opens a smal dropdown menu, saves which category its for and prefills the edit field. 
     const handleRowClick = (event, category) => {
         setAnchorEl(event.currentTarget);
         setSelectedCategory(category);
@@ -67,6 +71,7 @@ function DashboardPage() {
         setAnchorEl(null);
     };
 
+    // Saves the edited category name, refresh the list and close the dialog.
     const handleUpdateCategory = async () => {
         await updateCategory(selectedCategory.id, editCategoryName);
         const updated = await getCategories();
@@ -74,6 +79,7 @@ function DashboardPage() {
         setOpenEditDialog(false);
     };
 
+    // Deletes the selected category, refresh the list and closes the menu. 
     const handleDeleteCategory = async () => {
         await deleteCategory(selectedCategory.id);
         const updated = await getCategories();
@@ -114,6 +120,7 @@ function DashboardPage() {
 
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
 
+                {/*CATEGORY LIST - click a row to open the edit/delete menu*/}
                 <Grid size={7}>
                     {categories.length === 0 ? (
                         <Typography variant="body1">No categories yet.</Typography>
@@ -130,6 +137,7 @@ function DashboardPage() {
                     )}
                 </Grid>
 
+                {/* TODO: replace with real chart once subscription data exists*/}
                 <Grid size={5}>
                     <Paper sx={{ padding: 2, textAlign: 'center' }}>
                         <Typography variant="body2" color="text.secondary">
@@ -139,11 +147,13 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
+            {/* Opens the create-category dialog */}
             <Button variant="text" sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
                 onClick={() => setOpenDialog(true)}>
                 + New Subscription
             </Button>
 
+            {/* Create category dialog */}
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
                 <DialogTitle sx={{ textAlign: 'center' }}>New Category</DialogTitle>
                 <DialogContent>
@@ -161,11 +171,13 @@ function DashboardPage() {
                 </DialogActions>
             </Dialog>
 
+            {/* Edit/Delete menu, opens when a category row is clicked*/}
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                 <MenuItem onClick={handleEditClick}>Edit</MenuItem>
                 <MenuItem onClick={handleDeleteCategory}>Delete</MenuItem>
             </Menu>
 
+            {/* Edit category dialog, pre-filled with the selected category's name*/}
             <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
                 <DialogTitle sx={{ textAlign: 'center' }}>Edit Category</DialogTitle>
                 <DialogContent>
