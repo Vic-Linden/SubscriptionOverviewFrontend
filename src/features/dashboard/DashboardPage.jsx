@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
 import SubscriptionList from '../subscriptions/SubscriptionList';
+import { getSubscriptions } from '../subscriptions/subscriptionApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
@@ -68,15 +69,15 @@ function DashboardPage() {
             <Grid container spacing={2} sx={{ marginTop: 2, backgroundColor: '#57565A', borderRadius: 2, padding: 2 }}>
                 <Grid size={4}>
                     <Typography variant="body2" color="white">Monthly total</Typography>
-                    <Typography variant="h5" color="white">0 kr</Typography>
+                    <Typography variant="h5" color="white">{monthlyTotal} kr</Typography>
                 </Grid>
                 <Grid size={4}>
                     <Typography variant="body2" color="white">Active subscriptions</Typography>
-                    <Typography variant="h5" color="white">0</Typography>
+                    <Typography variant="h5" color="white">{activeCount}</Typography>
                 </Grid>
                 <Grid size={4}>
                     <Typography variant="body2" color="white">Top category</Typography>
-                    <Typography variant="h5" color="white">—</Typography>
+                    <Typography variant="h5" color="white">{topCategory}</Typography>
                 </Grid>
             </Grid>
 
