@@ -27,6 +27,8 @@ function DashboardPage() {
     const [newCategoryName, setNewCategoryName] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [editCategoryName, setEditCategoryName] = useState('');
 
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
@@ -53,10 +55,23 @@ function DashboardPage() {
     const handleRowClick = (event, category) => {
         setAnchorEl(event.currentTarget);
         setSelectedCategory(category);
+        setEditCategoryName(category.name);
     };
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleEditClick = () => {
+        setOpenEditDialog(true);
+        setAnchorEl(null);
+    };
+
+    const handleUpdateCategory = async () => {
+        await updateCategory(selectedCategory.id, editCategoryName);
+        const updated = await getCategories();
+        setCategories(updated);
+        setOpenEditDialog(false);
     };
 
     const handleDeleteCategory = async () => {
@@ -148,7 +163,7 @@ function DashboardPage() {
             </Dialog>
 
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                <MenuItem onClick={handleMenuClose}>Edit</MenuItem>
+                <MenuItem onClick={handleEditClick}>Edit</MenuItem>
                 <MenuItem onClick={handleDeleteCategory}>Delete</MenuItem>
             </Menu>
         </Box>
