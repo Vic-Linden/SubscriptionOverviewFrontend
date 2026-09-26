@@ -28,7 +28,9 @@ function SubscriptionList() {
     // Fetch all subscriptions and categories once when the page loads. 
     useEffect(() => {
         getSubscriptions()
-            .then((data) => setSubscriptions(data))
+            .then((data) => {
+                setSubscriptions(data);
+            })
             .catch(() => setSubscriptions([]));
 
         getCategories()
@@ -50,14 +52,27 @@ function SubscriptionList() {
 
     return (
         <Grid size={7}>
-            {subscriptions.length === 0 ? (
-                <Typography variant="body1">No subscriptions yet.</Typography>
+            {categories.length === 0 ? (
+                <Typography variant="body1">No categories yet.</Typography>
             ) : (
-                subscriptions.map((subscription) => (
-                    <Typography key={subscription.id} variant="body1">
-                        {subscription.name} — {subscription.price} kr
-                    </Typography>
-                ))
+                categories.map((category) => {
+                    const categorySubscriptions = subscriptions.filter(
+                        (subscription) => subscription.categoryName === category.name
+                    );
+
+                    return (
+                        <div key={category.id}>
+                            <Typography variant="body1" sx={{ fontWeight: 500, marginTop: 3, marginBottom: 1 }}>
+                                {category.name}
+                            </Typography>
+                            {categorySubscriptions.map((subscription) => (
+                                <Typography key={subscription.id} variant="body2" sx={{ paddingLeft: 2 }}>
+                                    {subscription.name} — {subscription.price} kr
+                                </Typography>
+                            ))}
+                        </div>
+                    );
+                })
             )}
 
             {/* Opens the create-subscription dialog */}
