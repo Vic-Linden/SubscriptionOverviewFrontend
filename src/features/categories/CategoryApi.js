@@ -14,3 +14,8 @@ export const createCategory = async (name) => {
     const response = await axiosInstance.post('/categories', {name});
     return response.data;
 };
+
+export const updateCategory = async (id, name) => {
+    const response = await axiosInstance.put(`/categories/${id}`, {name});
+    return response.data;
+};
