@@ -1,19 +1,90 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import {useNavigate} from 'react-router-dom';
-import { Typography, Box, Grid, Paper, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import {
+    Typography,
+    Box,
+    Grid,
+    Paper,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
+    Menu,
+    MenuItem
+} from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
+import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    const [categories, setCategories] = useState([]);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [editCategoryName, setEditCategoryName] = useState('');
+
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
 
+    // Fetches all categories once when the page loads.
+    useEffect(() => {
+        getCategories()
+            .then((data) => setCategories(data))
+            .catch(() => setCategories([]));
+    }, []);
+
+    // User logs out and sends them back to the login page. 
     const handleLogout = () => {
         logoutUser();
         navigate('/login');
+    };
+
+    // Creates a new category, refreshes the list, reset and closes the dialog. 
+    const handleCreateCategory = async () => {
+        await createCategory(newCategoryName);
+        const updated = await getCategories();
+        setCategories(updated);
+        setNewCategoryName('');
+        setOpenDialog(false);
+    };
+
+    // Opens a smal dropdown menu, saves which category its for and prefills the edit field. 
+    const handleRowClick = (event, category) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedCategory(category);
+        setEditCategoryName(category.name);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleEditClick = () => {
+        setOpenEditDialog(true);
+        setAnchorEl(null);
+    };
+
+    // Saves the edited category name, refresh the list and close the dialog.
+    const handleUpdateCategory = async () => {
+        await updateCategory(selectedCategory.id, editCategoryName);
+        const updated = await getCategories();
+        setCategories(updated);
+        setOpenEditDialog(false);
+    };
+
+    // Deletes the selected category, refresh the list and closes the menu. 
+    const handleDeleteCategory = async () => {
+        await deleteCategory(selectedCategory.id);
+        const updated = await getCategories();
+        setCategories(updated);
+        handleMenuClose();
     };
 
     return (
@@ -23,10 +94,10 @@ function DashboardPage() {
             <Typography variant="h4" component="span">Welcome {''}
                 {/*TODO: replace logout on click with a dropdown menu for "logout" option*/}
                 <Typography variant="h4" component="span" onClick={handleLogout}
-                sx={{
-                    cursor: 'pointer',
-                    '&:hover': {color: 'primary.main'}
-                }}>
+                    sx={{
+                        cursor: 'pointer',
+                        '&:hover': { color: 'primary.main' }
+                    }}>
                     {username}
                 </Typography>
             </Typography>
@@ -47,12 +118,26 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
-            {/* TODO: replace with real data from GET /api/categories and GET /api/subscriptions */}
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
+
+                {/*CATEGORY LIST - click a row to open the edit/delete menu*/}
                 <Grid size={7}>
-                    <Typography variant="body1">No categories yet.</Typography>
+                    {categories.length === 0 ? (
+                        <Typography variant="body1">No categories yet.</Typography>
+                    ) : (
+                        categories.map((category) => (
+                            <Typography key={category.id}
+                                variant="body1"
+                                onClick={(e) => handleRowClick(e, category)}
+                                sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+                            >
+                                {category.name}
+                            </Typography>
+                        ))
+                    )}
                 </Grid>
 
+                {/* TODO: replace with real chart once subscription data exists*/}
                 <Grid size={5}>
                     <Paper sx={{ padding: 2, textAlign: 'center' }}>
                         <Typography variant="body2" color="text.secondary">
@@ -62,11 +147,55 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
-            {/* TODO: open a create-subscription dialog on click */}
-            <Button variant="text" sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}>
+            {/* Opens the create-category dialog */}
+            <Button variant="text" sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
+                onClick={() => setOpenDialog(true)}>
                 + New Subscription
             </Button>
 
+            {/* Create category dialog */}
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>New Category</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="category name"
+                        fullWidth
+                        margin="normal"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+                    <Button onClick={handleCreateCategory} variant="contained">Create</Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Edit/Delete menu, opens when a category row is clicked*/}
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                <MenuItem onClick={handleEditClick}>Edit</MenuItem>
+                <MenuItem onClick={handleDeleteCategory}>Delete</MenuItem>
+            </Menu>
+
+            {/* Edit category dialog, pre-filled with the selected category's name*/}
+            <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>Edit Category</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Category name"
+                        fullWidth
+                        margin="normal"
+                        value={editCategoryName}
+                        onChange={(e) => setEditCategoryName(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
+                    <Button onClick={handleUpdateCategory} variant="contained">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }
