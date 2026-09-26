@@ -69,6 +69,10 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
+            <Grid container spacing={4} sx={{ marginTop: 4 }}>
+                <SubscriptionList />
+            </Grid>
+
         </Box>
     );
 }
