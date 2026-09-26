@@ -1,15 +1,24 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Typography, Box, Grid, Paper, Button } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
+import { getCategories } from '../categories/CategoryApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    const [categories, setCategories] = useState([]);
+
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
+
+    useEffect(() => {
+        getCategories()
+            .then((data) => setCategories(data))
+            .catch(() => setCategories([]));
+    }, []);
 
     const handleLogout = () => {
         logoutUser();
@@ -23,10 +32,10 @@ function DashboardPage() {
             <Typography variant="h4" component="span">Welcome {''}
                 {/*TODO: replace logout on click with a dropdown menu for "logout" option*/}
                 <Typography variant="h4" component="span" onClick={handleLogout}
-                sx={{
-                    cursor: 'pointer',
-                    '&:hover': {color: 'primary.main'}
-                }}>
+                    sx={{
+                        cursor: 'pointer',
+                        '&:hover': { color: 'primary.main' }
+                    }}>
                     {username}
                 </Typography>
             </Typography>
@@ -47,10 +56,18 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
-            {/* TODO: replace with real data from GET /api/categories and GET /api/subscriptions */}
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
-                <Grid size={7}>
+
+                <Grid size={7}> 
+                    {categories.length === 0 ? (
                     <Typography variant="body1">No categories yet.</Typography>
+                ) : (
+                    categories.map((category) => (
+                        <Typography key={category.id} variant="body1">
+                            {category.name} 
+                        </Typography>
+                    ))
+                )}
                 </Grid>
 
                 <Grid size={5}>
