@@ -8,7 +8,6 @@ import {
     Paper
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
-import CategoryList from '../categories/CategoryList';
 import SubscriptionList from '../subscriptions/SubscriptionList';
 
 function DashboardPage() {
@@ -57,7 +56,6 @@ function DashboardPage() {
 
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
 
-                <CategoryList />
 
                 {/* TODO: replace with real chart once subscription data exists*/}
                 <Grid size={5}>

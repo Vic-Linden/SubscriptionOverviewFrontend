@@ -12,9 +12,10 @@ import {
     MenuItem,
     InputLabel,
     FormControl,
+    Menu
 } from '@mui/material';
 import { getSubscriptions, createSubscription } from './subscriptionApi';
-import { getCategories } from '../categories/CategoryApi';
+import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
 
 function SubscriptionList() {
     const [subscriptions, setSubscriptions] = useState([]);
@@ -24,6 +25,10 @@ function SubscriptionList() {
     const [price, setPrice] = useState('');
     const [billingInterval, setBillingInterval] = useState(0);
     const [categoryId, setCategoryId] = useState('');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [editCategoryName, setEditCategoryName] = useState('');
 
     // Fetch all subscriptions and categories once when the page loads. 
     useEffect(() => {
@@ -37,6 +42,38 @@ function SubscriptionList() {
             .then((data) => setCategories(data))
             .catch(() => setCategories([]));
     }, []);
+
+    // Opens a smal dropdown menu, saves which category its for and prefills the edit field. 
+    const handleRowClick = (event, category) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedCategory(category);
+        setEditCategoryName(category.name);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleEditClick = () => {
+        setOpenEditDialog(true);
+        setAnchorEl(null);
+    };
+
+    // Saves the edited category name, refresh the list and close the dialog.
+    const handleUpdateCategory = async () => {
+        await updateCategory(selectedCategory.id, editCategoryName);
+        const updated = await getCategories();
+        setCategories(updated);
+        setOpenEditDialog(false);
+    };
+
+    // Deletes the selected category, refresh the list and closes the menu. 
+    const handleDeleteCategory = async () => {
+        await deleteCategory(selectedCategory.id);
+        const updated = await getCategories();
+        setCategories(updated);
+        handleMenuClose();
+    };
 
     // Creates a new subscription, refreshes the list, reset and closes the dialog.
     const handleCreateSubscription = async () => {
@@ -62,9 +99,18 @@ function SubscriptionList() {
 
                     return (
                         <div key={category.id}>
-                            <Typography variant="body1" sx={{ fontWeight: 500, marginTop: 3, marginBottom: 1 }}>
+                            <Typography variant="body1"
+                                onClick={(e) => handleRowClick(e, category)}
+                                sx={{
+                                    fontWeight: 500,
+                                    marginTop: 3,
+                                    marginBottom: 1,
+                                    cursor: 'pointer',
+                                    '&:hover': { color: 'primary.main' }
+                                }}>
                                 {category.name}
                             </Typography>
+
                             {categorySubscriptions.map((subscription) => (
                                 <Typography key={subscription.id} variant="body2" sx={{ paddingLeft: 2 }}>
                                     {subscription.name} — {subscription.price} kr
@@ -136,6 +182,32 @@ function SubscriptionList() {
                     <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
                     <Button onClick={handleCreateSubscription} variant="contained">
                         Create
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Edit/Delete menu, opens when a category row is clicked*/}
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                <MenuItem onClick={handleEditClick}>Edit</MenuItem>
+                <MenuItem onClick={handleDeleteCategory}>Delete</MenuItem>
+            </Menu>
+
+            {/* Edit category dialog, pre-filled with the selected category's name*/}
+            <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>Edit Category</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Category name"
+                        fullWidth
+                        margin="normal"
+                        value={editCategoryName}
+                        onChange={(e) => setEditCategoryName(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
+                    <Button onClick={handleUpdateCategory} variant="contained">
+                        Save
                     </Button>
                 </DialogActions>
             </Dialog>
