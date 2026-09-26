@@ -1,11 +1,17 @@
 import { useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import {Typography, 
-        Box, 
-        Grid, 
-        Paper, 
-        Button,
+import {
+    Typography,
+    Box,
+    Grid,
+    Paper,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
 import { getCategories, createCategory } from '../categories/CategoryApi';
@@ -100,6 +106,22 @@ function DashboardPage() {
                 + New Subscription
             </Button>
 
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>New Category</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="category name"
+                        fullWidth
+                        margin="normal"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+                    <Button onClick={handleCreateCategory} variant="contained">Create</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }
