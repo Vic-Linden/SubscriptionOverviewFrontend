@@ -29,6 +29,8 @@ function SubscriptionList() {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [editCategoryName, setEditCategoryName] = useState('');
+    const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
 
     // Fetch all subscriptions and categories once when the page loads. 
     useEffect(() => {
@@ -87,6 +89,15 @@ function SubscriptionList() {
         setOpenDialog(false);
     };
 
+    // Creates a new category, refreshes the list, reset and closes the dialog. 
+    const handleCreateCategory = async () => {
+        await createCategory(newCategoryName);
+        const updated = await getCategories();
+        setCategories(updated);
+        setNewCategoryName('');
+        setOpenCategoryDialog(false);
+    };
+
     return (
         <Grid size={7}>
             {categories.length === 0 ? (
@@ -122,13 +133,23 @@ function SubscriptionList() {
             )}
 
             {/* Opens the create-subscription dialog */}
-            <Button
-                variant="text"
-                sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
-                onClick={() => setOpenDialog(true)}
-            >
-                + New Subscription
-            </Button>
+            <div style={{ display: 'flex', gap: '24px' }}>
+                <Button
+                    variant="text"
+                    sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
+                    onClick={() => setOpenDialog(true)}
+                >
+                    + New Subscription
+                </Button>
+
+                <Button
+                    variant="text"
+                    sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
+                    onClick={() => setOpenCategoryDialog(true)}
+                >
+                    + New Category
+                </Button>
+            </div>
 
             {/* Create subscription dialog */}
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
@@ -209,6 +230,24 @@ function SubscriptionList() {
                     <Button onClick={handleUpdateCategory} variant="contained">
                         Save
                     </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Create category dialog */}
+            <Dialog open={openCategoryDialog} onClose={() => setOpenCategoryDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>New Category</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="category name"
+                        fullWidth
+                        margin="normal"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenCategoryDialog(false)}>Cancel</Button>
+                    <Button onClick={handleCreateCategory} variant="contained">Create</Button>
                 </DialogActions>
             </Dialog>
         </Grid>
