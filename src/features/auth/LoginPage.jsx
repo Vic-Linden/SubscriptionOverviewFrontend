@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { Card, Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { login } from './authApi';
 import { AuthContext } from './AuthContext';
@@ -11,6 +11,8 @@ function LoginPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const navigate = useNavigate();
+
     const { loginUser } = useContext(AuthContext);
 
     const handleSubmit = async (event) => {
@@ -19,6 +21,7 @@ function LoginPage() {
         try {
             const data = await login(email, password);
             loginUser(data.token);
+            navigate('/dashboard');
         } catch {
             setError('Invalid email or password');
         }

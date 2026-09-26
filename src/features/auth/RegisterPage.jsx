@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { Card, Typography, TextField, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { register } from './authApi';
 import { AuthContext } from './AuthContext';
@@ -12,6 +12,8 @@ function RegisterPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const navigate = useNavigate();
+
     const { loginUser } = useContext(AuthContext);
 
     const handleSubmit = async (event) => {
@@ -20,6 +22,7 @@ function RegisterPage() {
         try {
             const data = await register(email, password, displayUsername);
             loginUser(data.token);
+            navigate('/dashboard');
         } catch {
             setError('Email already in use.');
         }

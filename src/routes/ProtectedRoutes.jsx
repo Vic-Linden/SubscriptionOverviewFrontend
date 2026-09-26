@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../features/auth/AuthContext';
 
-function ProtectedRoute({children}) {
+function ProtectedRoutes({children}) {
     const {token} = useContext(AuthContext);
 
     if(!token){
@@ -11,4 +11,4 @@ function ProtectedRoute({children}) {
     return children;
 }
 
-export default ProtectedRoute;
+export default ProtectedRoutes;
