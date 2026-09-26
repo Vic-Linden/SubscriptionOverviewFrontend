@@ -11,10 +11,12 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    TextField
+    TextField,
+    Menu,
+    MenuItem
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
-import { getCategories, createCategory, getCategoryById, updateCategory, deleteCategory} from '../categories/CategoryApi';
+import { getCategories, createCategory, getCategoryById, updateCategory, deleteCategory } from '../categories/CategoryApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
@@ -54,14 +56,14 @@ function DashboardPage() {
     };
 
     const handleMenuClose = () => {
-        setAnchorE1(null);
+        setAnchorEl(null);
     };
 
     const handleDeleteCategory = async () => {
         await deleteCategory(selectedCategory.id);
         const updated = await getCategories();
         setCategories(updated);
-        handleMenuclose();
+        handleMenuClose();
     };
 
     return (
@@ -102,7 +104,11 @@ function DashboardPage() {
                         <Typography variant="body1">No categories yet.</Typography>
                     ) : (
                         categories.map((category) => (
-                            <Typography key={category.id} variant="body1">
+                            <Typography key={category.id}
+                                variant="body1"
+                                onClick={(e) => handleRowClick(e, category)}
+                                sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+                            >
                                 {category.name}
                             </Typography>
                         ))
@@ -140,6 +146,11 @@ function DashboardPage() {
                     <Button onClick={handleCreateCategory} variant="contained">Create</Button>
                 </DialogActions>
             </Dialog>
+
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                <MenuItem onClick={handleMenuClose}>Edit</MenuItem>
+                <MenuItem onClick={handleDeleteCategory}>Delete</MenuItem>
+            </Menu>
         </Box>
     );
 }
