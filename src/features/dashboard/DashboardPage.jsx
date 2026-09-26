@@ -1,4 +1,4 @@
-import { useContext} from 'react';
+import { useContext } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
 import CategoryList from '../categories/CategoryList';
+import SubscriptionList from '../subscriptions/SubscriptionList';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
