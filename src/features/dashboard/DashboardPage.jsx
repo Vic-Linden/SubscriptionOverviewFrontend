@@ -14,7 +14,7 @@ import {
     TextField
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
-import { getCategories, createCategory } from '../categories/CategoryApi';
+import { getCategories, createCategory, getCategoryById, updateCategory, deleteCategory} from '../categories/CategoryApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
@@ -23,6 +23,8 @@ function DashboardPage() {
     const [categories, setCategories] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState('');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
@@ -44,6 +46,22 @@ function DashboardPage() {
         setCategories(updated);
         setNewCategoryName('');
         setOpenDialog(false);
+    };
+
+    const handleRowClick = (event, category) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedCategory(category);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorE1(null);
+    };
+
+    const handleDeleteCategory = async () => {
+        await deleteCategory(selectedCategory.id);
+        const updated = await getCategories();
+        setCategories(updated);
+        handleMenuclose();
     };
 
     return (
