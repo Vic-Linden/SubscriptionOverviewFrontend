@@ -1,15 +1,22 @@
 import { useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { Typography, Box, Grid, Paper, Button } from '@mui/material';
+import {Typography, 
+        Box, 
+        Grid, 
+        Paper, 
+        Button,
+} from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
-import { getCategories } from '../categories/CategoryApi';
+import { getCategories, createCategory } from '../categories/CategoryApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [categories, setCategories] = useState([]);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
 
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
@@ -23,6 +30,14 @@ function DashboardPage() {
     const handleLogout = () => {
         logoutUser();
         navigate('/login');
+    };
+
+    const handleCreateCategory = async () => {
+        await createCategory(newCategoryName);
+        const updated = await getCategories();
+        setCategories(updated);
+        setNewCategoryName('');
+        setOpenDialog(false);
     };
 
     return (
@@ -58,16 +73,16 @@ function DashboardPage() {
 
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
 
-                <Grid size={7}> 
+                <Grid size={7}>
                     {categories.length === 0 ? (
-                    <Typography variant="body1">No categories yet.</Typography>
-                ) : (
-                    categories.map((category) => (
-                        <Typography key={category.id} variant="body1">
-                            {category.name} 
-                        </Typography>
-                    ))
-                )}
+                        <Typography variant="body1">No categories yet.</Typography>
+                    ) : (
+                        categories.map((category) => (
+                            <Typography key={category.id} variant="body1">
+                                {category.name}
+                            </Typography>
+                        ))
+                    )}
                 </Grid>
 
                 <Grid size={5}>
@@ -80,7 +95,8 @@ function DashboardPage() {
             </Grid>
 
             {/* TODO: open a create-subscription dialog on click */}
-            <Button variant="text" sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}>
+            <Button variant="text" sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
+                onClick={() => setOpenDialog(true)}>
                 + New Subscription
             </Button>
 
