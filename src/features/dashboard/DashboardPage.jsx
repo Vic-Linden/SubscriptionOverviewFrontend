@@ -139,7 +139,6 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
-            {/* TODO: open a create-subscription dialog on click */}
             <Button variant="text" sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
                 onClick={() => setOpenDialog(true)}>
                 + New Subscription
@@ -166,6 +165,25 @@ function DashboardPage() {
                 <MenuItem onClick={handleEditClick}>Edit</MenuItem>
                 <MenuItem onClick={handleDeleteCategory}>Delete</MenuItem>
             </Menu>
+
+            <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>Edit Category</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Category name"
+                        fullWidth
+                        margin="normal"
+                        value={editCategoryName}
+                        onChange={(e) => setEditCategoryName(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
+                    <Button onClick={handleUpdateCategory} variant="contained">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }
