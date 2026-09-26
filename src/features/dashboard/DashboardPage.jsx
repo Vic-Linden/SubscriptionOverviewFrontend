@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -14,6 +14,8 @@ function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    const [subscriptions, setSubscriptions] = useState([]);
+
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
 
@@ -22,6 +24,30 @@ function DashboardPage() {
         logoutUser();
         navigate('/login');
     };
+
+    // Fetches all subscriptions once, used to calculate the summary stats
+    useEffect(() => {
+        getSubscriptions()
+            .then((data) => setSubscriptions(data))
+            .catch(() => setSubscriptions([]));
+    }, []);
+
+    // Adds up the price of all subscriptions.
+    const monthlyTotal = subscriptions.reduce((sum, sub) => sum + sub.price, 0);
+
+    // Counts how many subscriptions there are.
+    const activeCount = subscriptions.length;
+
+    // Counts how many subscriptions belong to each category
+    const categoryCounts = subscriptions.reduce((counts, sub) => {
+        counts[sub.categoryName] = (counts[sub.categoryName] || 0) + 1;
+        return counts;
+    }, {});
+
+    // Finds the category with the most subscriptions.
+    const topCategory = Object.keys(categoryCounts).length > 0
+        ? Object.keys(categoryCounts).reduce((a, b) => (categoryCounts[a] > categoryCounts[b] ? a : b))
+        : '—';
 
     return (
         <Box sx={{ padding: 4 }}>
