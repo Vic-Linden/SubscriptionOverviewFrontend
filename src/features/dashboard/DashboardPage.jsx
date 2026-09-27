@@ -132,17 +132,17 @@ function DashboardPage() {
 
                 {/* The summary bar for monthly total, active subscription count, and top category */}
                 <Grid container spacing={2} sx={{ marginTop: 2, backgroundColor: '#57565A', borderRadius: 2, padding: 2 }}>
-                    <Grid size={4}>
-                        <Typography variant="body2" color="white">Monthly total</Typography>
-                        <Typography variant="h5" color="white">{monthlyTotal} kr</Typography>
+                    <Grid size={4} sx={{textAlign:'center'}}>
+                        <Typography variant="body2" sx={{color: 'white'}}>Monthly total</Typography>
+                        <Typography variant="h5" sx={{color: 'white'}}>{monthlyTotal} kr</Typography>
                     </Grid>
-                    <Grid size={4}>
-                        <Typography variant="body2" color="white">Active subscriptions</Typography>
-                        <Typography variant="h5" color="white">{activeCount}</Typography>
+                    <Grid size={4} sx={{textAlign:'center'}}>
+                        <Typography variant="body2" sx={{color: 'white'}}>Active subscriptions</Typography>
+                        <Typography variant="h5" sx={{color: 'white'}}>{activeCount}</Typography>
                     </Grid>
-                    <Grid size={4}>
-                        <Typography variant="body2" color="white">Top category</Typography>
-                        <Typography variant="h5" color="white">{topCategory}</Typography>
+                    <Grid size={4} sx={{textAlign:'center'}}>
+                        <Typography variant="body2" sx={{color: 'white'}}>Top category</Typography>
+                        <Typography variant="h5" sx={{color: 'white'}}>{topCategory}</Typography>
                     </Grid>
                 </Grid>
 
