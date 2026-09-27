@@ -14,7 +14,7 @@ import {
     FormControl,
     Menu
 } from '@mui/material';
-import { getSubscriptions, createSubscription } from './subscriptionApi';
+import { getSubscriptions, createSubscription, updateSubscription, deleteSubscription } from './subscriptionApi';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
 
 function SubscriptionList() {
@@ -31,6 +31,13 @@ function SubscriptionList() {
     const [editCategoryName, setEditCategoryName] = useState('');
     const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState('');
+    const [anchorElSub, setAnchorElSub] = useState(null);
+    const [selectedSubscription, setSelectedSubscription] = useState(null);
+    const [openEditSubDialog, setOpenEditSubDialog] = useState(false);
+    const [editName, setEditName] = useState('');
+    const [editPrice, setEditPrice] = useState('');
+    const [editBillingInterval, setEditBillingInterval] = useState(0);
+    const [editCategoryId, setEditCategoryId] = useState('');
 
     // Fetch all subscriptions and categories once when the page loads. 
     useEffect(() => {
@@ -52,6 +59,15 @@ function SubscriptionList() {
         setEditCategoryName(category.name);
     };
 
+    // Opens a small dropdown menu for a subscription row, prefills the edit fields
+    const handleSubRowClick = (event, subscription) => {
+        setAnchorElSub(event.currentTarget);
+        setSelectedSubscription(subscription);
+        setEditName(subscription.name);
+        setEditPrice(subscription.price);
+        setEditBillingInterval(subscription.billingInterval);
+    };
+
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
@@ -59,6 +75,15 @@ function SubscriptionList() {
     const handleEditClick = () => {
         setOpenEditDialog(true);
         setAnchorEl(null);
+    };
+
+    const handleSubMenuClose = () => {
+        setAnchorElSub(null);
+    };
+
+    const handleEditSubClick = () => {
+        setOpenEditSubDialog(true);
+        setAnchorElSub(null);
     };
 
     // Saves the edited category name, refresh the list and close the dialog.
@@ -77,6 +102,15 @@ function SubscriptionList() {
         handleMenuClose();
     };
 
+    // Creates a new category, refreshes the list, reset and closes the dialog. 
+    const handleCreateCategory = async () => {
+        await createCategory(newCategoryName);
+        const updated = await getCategories();
+        setCategories(updated);
+        setNewCategoryName('');
+        setOpenCategoryDialog(false);
+    };
+
     // Creates a new subscription, refreshes the list, reset and closes the dialog.
     const handleCreateSubscription = async () => {
         await createSubscription(name, price, billingInterval, categoryId);
@@ -89,13 +123,20 @@ function SubscriptionList() {
         setOpenDialog(false);
     };
 
-    // Creates a new category, refreshes the list, reset and closes the dialog. 
-    const handleCreateCategory = async () => {
-        await createCategory(newCategoryName);
-        const updated = await getCategories();
-        setCategories(updated);
-        setNewCategoryName('');
-        setOpenCategoryDialog(false);
+    // Saves the edited subscription, refreshes the list, closes the dialog
+    const handleUpdateSubscription = async () => {
+        await updateSubscription(selectedSubscription.id, editName, editPrice, editBillingInterval, editCategoryId);
+        const updated = await getSubscriptions();
+        setSubscriptions(updated);
+        setOpenEditSubDialog(false);
+    };
+
+    // Deletes the selected subscription, refreshes the list, closes the menu
+    const handleDeleteSubscription = async () => {
+        await deleteSubscription(selectedSubscription.id);
+        const updated = await getSubscriptions();
+        setSubscriptions(updated);
+        handleSubMenuClose();
     };
 
     return (
