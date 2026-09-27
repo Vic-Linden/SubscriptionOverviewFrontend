@@ -12,7 +12,8 @@ function ProtectedRoutes({ children, requiredRole }) {
 
     if (requiredRole) {
         const decoded = jwtDecode(token);
-        if (decoded.role !== requiredRole) {
+        const userRole = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        if (userRole !== requiredRole) {
             return <Navigate to="/dashboard" />;
         }
     }
