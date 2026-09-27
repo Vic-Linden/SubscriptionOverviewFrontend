@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { getSubscriptions, createSubscription, updateSubscription, deleteSubscription } from './subscriptionApi';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
+import { createPayment } from '../payments/paymentApi';
 
 function SubscriptionList() {
     const [subscriptions, setSubscriptions] = useState([]);
@@ -38,6 +39,11 @@ function SubscriptionList() {
     const [editPrice, setEditPrice] = useState('');
     const [editBillingInterval, setEditBillingInterval] = useState(0);
     const [editCategoryId, setEditCategoryId] = useState('');
+    // Payments
+    const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState('');
+    const [paymentDate, setPaymentDate] = useState('');
+
 
     // Fetch all subscriptions and categories once when the page loads. 
     useEffect(() => {
@@ -139,6 +145,20 @@ function SubscriptionList() {
         handleSubMenuClose();
     };
 
+    // Opens the add-payment dialog and closes the menu.
+    const handleLogPaymentClick = () => {
+        setOpenPaymentDialog(true);
+        setAnchorElSub(null);
+    };
+
+    // Adds a payment for the selected subscription, resets and closes the dialog.
+    const handleCreatePayment = async () => {
+        await createPayment(selectedSubscription.id, paymentDate, paymentAmount);
+        setPaymentAmount('');
+        setPaymentDate('');
+        setOpenPaymentDialog(false);
+    };
+
     return (
         <Grid size={7}>
             {categories.length === 0 ? (
@@ -149,18 +169,22 @@ function SubscriptionList() {
                         (subscription) => subscription.categoryName === category.name
                     );
 
+                    const categoryTotal = categorySubscriptions.reduce((sum, sub) => sum + sub.price, 0);
+
                     return (
                         <div key={category.id}>
-                            <Typography variant="body1"
+                            <Typography
+                                variant="body1"
                                 onClick={(e) => handleRowClick(e, category)}
                                 sx={{
                                     fontWeight: 500,
                                     marginTop: 3,
                                     marginBottom: 1,
                                     cursor: 'pointer',
-                                    '&:hover': { color: 'primary.main' }
-                                }}>
-                                {category.name}
+                                    '&:hover': { color: 'primary.main' },
+                                }}
+                            >
+                                {category.name} — {categoryTotal} kr
                             </Typography>
 
                             {categorySubscriptions.map((subscription) => (
@@ -174,7 +198,7 @@ function SubscriptionList() {
                                         '&:hover': { color: 'primary.main' },
                                     }}
                                 >
-                                    {subscription.name} — {subscription.price} kr
+                                    {subscription.name} — {subscription.price} kr / {subscription.billingInterval === 0 ? 'month' : 'year'}
                                 </Typography>
                             ))}
                         </div>
@@ -303,6 +327,7 @@ function SubscriptionList() {
 
             {/* Edit/Delete menu, opens when a subscription row is clicked */}
             <Menu anchorEl={anchorElSub} open={Boolean(anchorElSub)} onClose={handleSubMenuClose}>
+                <MenuItem onClick={handleLogPaymentClick}>Add Payment</MenuItem>
                 <MenuItem onClick={handleEditSubClick}>Edit</MenuItem>
                 <MenuItem onClick={handleDeleteSubscription}>Delete</MenuItem>
             </Menu>
@@ -357,6 +382,34 @@ function SubscriptionList() {
                 <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
                     <Button onClick={() => setOpenEditSubDialog(false)}>Cancel</Button>
                     <Button onClick={handleUpdateSubscription} variant="contained">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Add payment dialog */}
+            <Dialog open={openPaymentDialog} onClose={() => setOpenPaymentDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>Add Payment</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Amount"
+                        type="number"
+                        fullWidth
+                        margin="normal"
+                        value={paymentAmount}
+                        onChange={(e) => setPaymentAmount(e.target.value)}
+                    />
+                    <TextField
+                        type="date"
+                        fullWidth
+                        margin="normal"
+                        value={paymentDate}
+                        onChange={(e) => setPaymentDate(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenPaymentDialog(false)}>Cancel</Button>
+                    <Button onClick={handleCreatePayment} variant="contained">
                         Save
                     </Button>
                 </DialogActions>
