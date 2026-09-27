@@ -5,7 +5,7 @@ function Footer() {
     <Typography
       variant="body2"
       sx={{
-        position: 'fixed',
+        position: { xs: 'static', sm: 'fixed' },
         bottom: 0,
         left: 0,
         right: 0,
