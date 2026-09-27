@@ -164,7 +164,16 @@ function SubscriptionList() {
                             </Typography>
 
                             {categorySubscriptions.map((subscription) => (
-                                <Typography key={subscription.id} variant="body2" sx={{ paddingLeft: 2 }}>
+                                <Typography
+                                    key={subscription.id}
+                                    variant="body2"
+                                    onClick={(e) => handleSubRowClick(e, subscription)}
+                                    sx={{
+                                        paddingLeft: 2,
+                                        cursor: 'pointer',
+                                        '&:hover': { color: 'primary.main' },
+                                    }}
+                                >
                                     {subscription.name} — {subscription.price} kr
                                 </Typography>
                             ))}
@@ -256,7 +265,7 @@ function SubscriptionList() {
 
             {/* Edit category dialog, pre-filled with the selected category's name*/}
             <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
-                <DialogTitle sx={{ textAlign: 'center' }}>Edit Category</DialogTitle>
+                <DialogTitle sx={{ textAlign: 'center' }}>Edit category name</DialogTitle>
                 <DialogContent>
                     <TextField
                         label="Category name"
@@ -289,6 +298,67 @@ function SubscriptionList() {
                 <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
                     <Button onClick={() => setOpenCategoryDialog(false)}>Cancel</Button>
                     <Button onClick={handleCreateCategory} variant="contained">Create</Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Edit/Delete menu, opens when a subscription row is clicked */}
+            <Menu anchorEl={anchorElSub} open={Boolean(anchorElSub)} onClose={handleSubMenuClose}>
+                <MenuItem onClick={handleEditSubClick}>Edit</MenuItem>
+                <MenuItem onClick={handleDeleteSubscription}>Delete</MenuItem>
+            </Menu>
+
+            {/* Edit subscription dialog, pre-filled with the selected subscription's values */}
+            <Dialog open={openEditSubDialog} onClose={() => setOpenEditSubDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>Edit your Subscription</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Name"
+                        fullWidth
+                        margin="normal"
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                    />
+                    <TextField
+                        label="Price"
+                        type="number"
+                        fullWidth
+                        margin="normal"
+                        value={editPrice}
+                        onChange={(e) => setEditPrice(e.target.value)}
+                    />
+
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel>Billing Interval</InputLabel>
+                        <Select
+                            value={editBillingInterval}
+                            label="Billing Interval"
+                            onChange={(e) => setEditBillingInterval(e.target.value)}
+                        >
+                            <MenuItem value={0}>Monthly</MenuItem>
+                            <MenuItem value={1}>Yearly</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel>Category</InputLabel>
+                        <Select
+                            value={editCategoryId}
+                            label="Category"
+                            onChange={(e) => setEditCategoryId(e.target.value)}
+                        >
+                            {categories.map((category) => (
+                                <MenuItem key={category.id} value={category.id}>
+                                    {category.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenEditSubDialog(false)}>Cancel</Button>
+                    <Button onClick={handleUpdateSubscription} variant="contained">
+                        Save
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Grid>
