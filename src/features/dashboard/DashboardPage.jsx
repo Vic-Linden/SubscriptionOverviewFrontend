@@ -39,13 +39,13 @@ function DashboardPage() {
     // Counts how many subscriptions there are.
     const activeCount = subscriptions.length;
 
-    // Counts how many subscriptions belong to each category
+    // Adds up the total price per category.
     const categoryTotals = subscriptions.reduce((totals, sub) => {
         totals[sub.categoryName] = (totals[sub.categoryName] || 0) + sub.price;
         return totals;
     }, {});
 
-    // Finds the category with the most subscriptions.
+    // Finds the category with the highest total price.
     const topCategory = Object.keys(categoryTotals).length > 0
         ? Object.keys(categoryTotals).reduce((a, b) => (categoryTotals[a] > categoryTotals[b] ? a : b))
         : '—';
@@ -82,8 +82,6 @@ function DashboardPage() {
             </Grid>
 
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
-
-
                 {/* TODO: replace with real chart once subscription data exists*/}
                 <Grid size={5}>
                     <Paper sx={{ padding: 2, textAlign: 'center' }}>
@@ -94,6 +92,7 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
+            {/* Category list with grouped subscriptions, and the "New Subscription"/"New Category" buttons */}
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
                 <SubscriptionList />
             </Grid>
