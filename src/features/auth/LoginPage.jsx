@@ -39,13 +39,25 @@ function LoginPage() {
     return (
         <div style={{
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
             backgroundImage: `url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            position: 'relative',
         }}>
+            <Typography variant="h3" sx={{
+                position: 'absolute',
+                top: 80,
+                fontWeight: 300,
+                color: 'grey',
+                textShadow: '0px 2px 8px rgba(0, 0, 0, 0.5)',
+            }}>
+                Subscription Overview
+            </Typography>
+
             <Card elovation={3}
                 sx={{
                     maxWidth: 400,
