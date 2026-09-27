@@ -382,6 +382,34 @@ function SubscriptionList() {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {/* Add payment dialog */}
+            <Dialog open={openPaymentDialog} onClose={() => setOpenPaymentDialog(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>Add Payment</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Amount"
+                        type="number"
+                        fullWidth
+                        margin="normal"
+                        value={paymentAmount}
+                        onChange={(e) => setPaymentAmount(e.target.value)}
+                    />
+                    <TextField
+                        type="date"
+                        fullWidth
+                        margin="normal"
+                        value={paymentDate}
+                        onChange={(e) => setPaymentDate(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'space-between', padding: 2 }}>
+                    <Button onClick={() => setOpenPaymentDialog(false)}>Cancel</Button>
+                    <Button onClick={handleCreatePayment} variant="contained">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Grid>
     );
 }
