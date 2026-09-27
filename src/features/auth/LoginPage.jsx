@@ -1,11 +1,10 @@
 import { useState, useContext } from 'react';
-import { Card, Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
+import { Card, Typography, TextField, Button, Checkbox, FormControlLabel, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 import { login } from './authApi';
 import { AuthContext } from './AuthContext';
-import bgImage from '../../assets/bg-mountain.avif';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -37,25 +36,28 @@ function LoginPage() {
     };
 
     return (
-        <div style={{
+        <Box sx={{
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
             position: 'relative',
+            padding: 2,
         }}>
             <Typography variant="h3" sx={{
                 position: 'absolute',
-                top: 80,
+                top: 40,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '100%',
+                textAlign: 'center',
                 fontWeight: 300,
-                color: 'grey',
+                color: 'white',
                 textShadow: '0px 2px 8px rgba(0, 0, 0, 0.5)',
+                fontSize: { xs: '1.5rem', sm: '3rem' },
             }}>
-                Subscription Overview
+                Your Subscription Overview
             </Typography>
 
             <Card elovation={3}
@@ -107,7 +109,7 @@ function LoginPage() {
                     </Typography>
                 </form>
             </Card>
-        </div>
+        </Box>
     );
 }
 export default LoginPage;

@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Grid, Card, Avatar } from '@mui/material';
-import bgImage from '../../assets/bg-mountain.avif';
 import { getAllUsers } from './adminApi';
 import { AuthContext } from '../auth/AuthContext';
 
@@ -37,7 +36,6 @@ function AdminPage() {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundImage: `url(${bgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         padding: 4,

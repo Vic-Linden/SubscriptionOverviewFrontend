@@ -10,7 +10,6 @@ import {
     MenuItem,
     Card
 } from '@mui/material';
-import bgImage from '../../assets/bg-mountain.avif';
 import { AuthContext } from '../auth/AuthContext';
 import SubscriptionList from '../subscriptions/SubscriptionList';
 import { getSubscriptions } from '../subscriptions/subscriptionApi';
@@ -95,7 +94,6 @@ function DashboardPage() {
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
-            backgroundImage: `url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             padding: 4,
