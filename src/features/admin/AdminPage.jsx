@@ -1,49 +1,71 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Grid, Card, Avatar } from '@mui/material';
 import { getAllUsers } from './adminApi';
+import { AuthContext } from '../auth/AuthContext';
+
 
 function AdminPage() {
-  const [users, setUsers] = useState([]);
-  const [search, setSearch] = useState('');
+    const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState('');
 
-  // Fetches all users on dashboard.
-  useEffect(() => {
-    getAllUsers()
-      .then((data) => setUsers(data))
-      .catch(() => setUsers([]));
-  }, []);
 
-  // Filters users by email based on the search text.
-  const filteredUsers = users.filter((user) =>
-    user.email.toLowerCase().includes(search.toLowerCase())
-  );
+    const { logoutUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-  return (
-    <Box sx={{ padding: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        All Users
-      </Typography>
+    const handleLogout = () => {
+        logoutUser();
+        navigate('/login');
+    };
 
-      <TextField
-        label="Search by email"
-        fullWidth
-        margin="normal"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+    // Fetches all users on dashboard.
+    useEffect(() => {
+        getAllUsers()
+            .then((data) => setUsers(data))
+            .catch(() => setUsers([]));
+    }, []);
 
-      <Grid container spacing={2} sx={{ marginTop: 2 }}>
-        {filteredUsers.map((user) => (
-          <Grid size={6} key={user.id}>
-            <Card sx={{ display: 'flex', alignItems: 'center', padding: 2, gap: 2 }}>
-              <Avatar>{user.email.charAt(0).toUpperCase()}</Avatar>
-              <Typography>{user.email}</Typography>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
-  );
+    // Filters users by email based on the search text.
+    const filteredUsers = users.filter((user) =>
+        user.email.toLowerCase().includes(search.toLowerCase())
+    );
+
+    return (
+        <Box sx={{ padding: 4 }}>
+            <Typography
+                variant="h4"
+                onClick={handleLogout}
+                sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+                gutterBottom
+            >
+                Welcome Admin
+            </Typography>
+
+            <TextField
+                label="Search by email"
+                fullWidth
+                margin="normal"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+
+            <Typography variant="h4" gutterBottom>
+                All Users
+            </Typography>
+
+            {/* Shows all users as a card with an avatar */}
+            <Grid container spacing={2} sx={{ marginTop: 2 }}>
+                {filteredUsers.map((user) => (
+                    <Grid size={6} key={user.id}>
+                        <Card sx={{ display: 'flex', alignItems: 'center', padding: 2, gap: 2 }}>
+                            <Avatar>{user.email.charAt(0).toUpperCase()}</Avatar>
+                            <Typography>{user.email}</Typography>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        </Box>
+    );
 }
 
 export default AdminPage;
