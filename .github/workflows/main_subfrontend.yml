@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: '24.x'
 
+      - name: Create .env.production
+        run: echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
+
       - name: npm install, build, and test
         run: |
           npm install
