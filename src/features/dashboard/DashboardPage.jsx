@@ -6,7 +6,8 @@ import {
     Typography,
     Box,
     Grid,
-    Paper
+    Menu,
+    MenuItem
 } from '@mui/material';
 import { AuthContext } from '../auth/AuthContext';
 import SubscriptionList from '../subscriptions/SubscriptionList';
@@ -19,6 +20,7 @@ function DashboardPage() {
 
     const [subscriptions, setSubscriptions] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [anchorElUser, setAnchorElUser] = useState(null);
 
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
@@ -27,6 +29,14 @@ function DashboardPage() {
     const handleLogout = () => {
         logoutUser();
         navigate('/login');
+    };
+
+    const handleUserMenuClick = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleUserMenuClose = () => {
+        setAnchorElUser(null);
     };
 
     // Fetches all subscriptions once, used to calculate the summary stats
@@ -83,17 +93,21 @@ function DashboardPage() {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 3 }}>
                 <Typography variant="body1">
                     Welcome{' '}
-                    {/* TODO: replace logout on click with a dropdown menu for "logout" option */}
                     <Typography
                         variant="body1"
                         component="span"
-                        onClick={handleLogout}
+                        onClick={handleUserMenuClick}
                         sx={{ cursor: 'pointer', fontWeight: 500, '&:hover': { color: 'primary.main' } }}
                     >
                         {username}
                     </Typography>
                 </Typography>
             </Box>
+
+            {/* Logout menu, opens when the username is clicked */}
+            <Menu anchorEl={anchorElUser} open={Boolean(anchorElUser)} onClose={handleUserMenuClose}>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
 
             {/* The summary bar for monthly total, active subscription count, and top category */}
             <Grid container spacing={2} sx={{ marginTop: 2, backgroundColor: '#57565A', borderRadius: 2, padding: 2 }}>
