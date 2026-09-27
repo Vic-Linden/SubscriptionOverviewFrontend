@@ -12,7 +12,8 @@ import {
     MenuItem,
     InputLabel,
     FormControl,
-    Menu
+    Menu,
+    Box
 } from '@mui/material';
 import { getSubscriptions, createSubscription, updateSubscription, deleteSubscription } from './subscriptionApi';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
@@ -188,18 +189,24 @@ function SubscriptionList() {
                             </Typography>
 
                             {categorySubscriptions.map((subscription) => (
-                                <Typography
+                                <Box
                                     key={subscription.id}
-                                    variant="body2"
                                     onClick={(e) => handleSubRowClick(e, subscription)}
                                     sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
                                         paddingLeft: 2,
+                                        paddingY: 1,
                                         cursor: 'pointer',
+                                        borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
                                         '&:hover': { color: 'primary.main' },
                                     }}
                                 >
-                                    {subscription.name} — {subscription.price} kr / {subscription.billingInterval === 0 ? 'month' : 'year'}
-                                </Typography>
+                                    <Typography variant="body2">{subscription.name}</Typography>
+                                    <Typography variant="body2">
+                                        {subscription.price} kr / {subscription.billingInterval === 0 ? 'monthly' : 'year'}
+                                    </Typography>
+                                </Box>
                             ))}
                         </div>
                     );
