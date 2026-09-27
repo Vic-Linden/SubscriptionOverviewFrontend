@@ -55,7 +55,7 @@ function AdminPage() {
             <Typography
                 variant="h4"
                 onClick={handleLogout}
-                sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' } }}
+                sx={{ cursor: 'pointer', textAlign: 'center', '&:hover': { color: 'primary.main' } }}
                 gutterBottom
             >
                 Welcome Admin
@@ -69,14 +69,14 @@ function AdminPage() {
                 onChange={(e) => setSearch(e.target.value)}
             />
 
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" sx={{ textAlign: 'center' }} gutterBottom>
                 All Users
             </Typography>
 
             {/* Shows all users as a card with an avatar */}
             <Grid container spacing={2} sx={{ marginTop: 2 }}>
                 {filteredUsers.map((user) => (
-                    <Grid size={6} key={user.id}>
+                    <Grid size={{ xs: 12, sm: 6 }} key={user.id}>
                         <Card sx={{ display: 'flex', alignItems: 'center', padding: 2, gap: 2 }}>
                             <Avatar>{user.email.charAt(0).toUpperCase()}</Avatar>
                             <Typography>{user.email}</Typography>
