@@ -40,14 +40,14 @@ function DashboardPage() {
     const activeCount = subscriptions.length;
 
     // Counts how many subscriptions belong to each category
-    const categoryCounts = subscriptions.reduce((counts, sub) => {
-        counts[sub.categoryName] = (counts[sub.categoryName] || 0) + 1;
-        return counts;
+    const categoryTotals = subscriptions.reduce((totals, sub) => {
+        totals[sub.categoryName] = (totals[sub.categoryName] || 0) + sub.price;
+        return totals;
     }, {});
 
     // Finds the category with the most subscriptions.
-    const topCategory = Object.keys(categoryCounts).length > 0
-        ? Object.keys(categoryCounts).reduce((a, b) => (categoryCounts[a] > categoryCounts[b] ? a : b))
+    const topCategory = Object.keys(categoryTotals).length > 0
+        ? Object.keys(categoryTotals).reduce((a, b) => (categoryTotals[a] > categoryTotals[b] ? a : b))
         : '—';
 
     return (
@@ -65,7 +65,7 @@ function DashboardPage() {
                 </Typography>
             </Typography>
 
-            {/* TODO: replace with real data from GET /api/subscriptions */}
+            {/* The summary bar for monthly total, active subscription count, and top category */}
             <Grid container spacing={2} sx={{ marginTop: 2, backgroundColor: '#57565A', borderRadius: 2, padding: 2 }}>
                 <Grid size={4}>
                     <Typography variant="body2" color="white">Monthly total</Typography>
