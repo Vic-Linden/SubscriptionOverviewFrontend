@@ -161,7 +161,7 @@ function SubscriptionList() {
     };
 
     return (
-        <Grid size={7}>
+        <Grid size={{ xs: 12, sm: 7 }}>
             {categories.length === 0 ? (
                 <Typography variant="body1">No categories yet.</Typography>
             ) : (
@@ -182,6 +182,7 @@ function SubscriptionList() {
                                     marginTop: 3,
                                     marginBottom: 1,
                                     cursor: 'pointer',
+                                    textAlign: { xs: 'center', sm: 'left' },
                                     '&:hover': { color: 'primary.main' },
                                 }}
                             >
@@ -195,15 +196,19 @@ function SubscriptionList() {
                                     sx={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
+                                        alignItems: 'center',
                                         paddingLeft: 2,
+                                        paddingRight: 2,
                                         paddingY: 1,
                                         cursor: 'pointer',
                                         borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
                                         '&:hover': { color: 'primary.main' },
                                     }}
                                 >
-                                    <Typography variant="body2">{subscription.name}</Typography>
-                                    <Typography variant="body2">
+                                    <Typography variant="body2" sx={{ fontSize: { xs: '0.85rem', sm: '0.875rem' } }}>
+                                        {subscription.name}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ whiteSpace: 'nowrap', fontSize: { xs: '0.80rem', sm: '0.875rem' } }}>
                                         {subscription.price} kr / {subscription.billingInterval === 0 ? 'monthly' : 'year'}
                                     </Typography>
                                 </Box>
@@ -214,10 +219,16 @@ function SubscriptionList() {
             )}
 
             {/* Opens the create-subscription dialog */}
-            <div style={{ display: 'flex', gap: '24px' }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 1, sm: 3 } }}>
                 <Button
                     variant="text"
-                    sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
+                    sx={{
+                        marginTop: 4,
+                        textTransform: 'none',
+                        fontSize: '1rem',
+                        backgroundColor: { xs: 'white', sm: 'transparent' },
+                        border: { xs: '1px solid rgba(0, 0, 0, 0.1)', sm: 'none' },
+                    }}
                     onClick={() => setOpenDialog(true)}
                 >
                     + New Subscription
@@ -225,12 +236,18 @@ function SubscriptionList() {
 
                 <Button
                     variant="text"
-                    sx={{ marginTop: 4, textTransform: 'none', fontSize: '1rem' }}
+                    sx={{
+                        marginTop: 4,
+                        textTransform: 'none',
+                        fontSize: '1rem',
+                        backgroundColor: { xs: 'white', sm: 'transparent' },
+                        border: { xs: '1px solid rgba(0, 0, 0, 0.1)', sm: 'none' },
+                    }}
                     onClick={() => setOpenCategoryDialog(true)}
                 >
                     + New Category
                 </Button>
-            </div>
+            </Box>
 
             {/* Create subscription dialog */}
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
