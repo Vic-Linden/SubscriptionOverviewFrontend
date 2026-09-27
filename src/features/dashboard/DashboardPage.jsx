@@ -64,6 +64,19 @@ function DashboardPage() {
         ? Object.keys(categoryTotals).reduce((a, b) => (categoryTotals[a] > categoryTotals[b] ? a : b))
         : '—';
 
+    // Builds the data Recharts. one entry per category, with its total price.
+    const chartData = categories
+        .map((category) => ({
+            name: category.name,
+            value: subscriptions
+                .filter((sub) => sub.categoryName === category.name)
+                .reduce((sum, sub) => sum + sub.price, 0),
+        }))
+        .filter((entry) => entry.value > 0);
+
+    // Add sets of colors which will be assigned to categories.
+    const chartColors = ['#378ADD', '#3B6D11', '#D97706', '#DB2777', '#7C3AED', '#DC2626'];
+
     return (
         <Box sx={{ padding: 4 }}>
 
@@ -96,13 +109,35 @@ function DashboardPage() {
             </Grid>
 
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
-                {/* TODO: replace with real chart once subscription data exists*/}
+                {/* Donut chart showing total price per category, with a color-coded legend */}
                 <Grid size={5}>
-                    <Paper sx={{ padding: 2, textAlign: 'center' }}>
-                        <Typography variant="body2" color="text.secondary">
-                            Chart will be displayed here when user have subscriptions.
-                        </Typography>
-                    </Paper>
+                    <PieChart width={250} height={250}>
+                        <Pie
+                            data={chartData}
+                            dataKey="value"
+                            nameKey="name"
+                            innerRadius={60}
+                            outerRadius={90}
+                        >
+                            {chartData.map((entry, index) => (
+                                <Cell key={entry.name} fill={chartColors[index % chartColors.length]} />
+                            ))}
+                        </Pie>
+                    </PieChart>
+
+                    {chartData.map((entry, index) => (
+                        <div key={entry.name} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <div
+                                style={{
+                                    width: 12,
+                                    height: 12,
+                                    backgroundColor: chartColors[index % chartColors.length],
+                                    borderRadius: 2,
+                                }}
+                            />
+                            <Typography variant="body2">{entry.name}</Typography>
+                        </div>
+                    ))}
                 </Grid>
             </Grid>
 
