@@ -194,7 +194,9 @@ function SubscriptionList() {
                                     onClick={(e) => handleSubRowClick(e, subscription)}
                                     sx={{
                                         paddingLeft: 2,
+                                        paddingY: 1,
                                         cursor: 'pointer',
+                                        borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
                                         '&:hover': { color: 'primary.main' },
                                     }}
                                 >
