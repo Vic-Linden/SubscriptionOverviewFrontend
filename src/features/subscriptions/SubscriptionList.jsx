@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { getSubscriptions, createSubscription, updateSubscription, deleteSubscription } from './subscriptionApi';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
+import { createPayment } from '../payments/paymentApi';
 
 function SubscriptionList() {
     const [subscriptions, setSubscriptions] = useState([]);
@@ -38,6 +39,11 @@ function SubscriptionList() {
     const [editPrice, setEditPrice] = useState('');
     const [editBillingInterval, setEditBillingInterval] = useState(0);
     const [editCategoryId, setEditCategoryId] = useState('');
+    // Payments
+    const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState('');
+    const [paymentDate, setPaymentDate] = useState('');
+
 
     // Fetch all subscriptions and categories once when the page loads. 
     useEffect(() => {
@@ -137,6 +143,20 @@ function SubscriptionList() {
         const updated = await getSubscriptions();
         setSubscriptions(updated);
         handleSubMenuClose();
+    };
+
+    // Opens the add-payment dialog and closes the menu.
+    const handleLogPaymentClick = () => {
+        setOpenPaymentDialog(true);
+        setAnchorElSub(null);
+    };
+
+    // Adds a payment for the selected subscription, resets and closes the dialog.
+    const handleCreatePayment = async () => {
+        await createPayment(selectedSubscription.id, paymentDate, paymentAmount);
+        setPaymentAmount('');
+        setPaymentDate('');
+        setOpenPaymentDialog(false);
     };
 
     return (
@@ -303,6 +323,7 @@ function SubscriptionList() {
 
             {/* Edit/Delete menu, opens when a subscription row is clicked */}
             <Menu anchorEl={anchorElSub} open={Boolean(anchorElSub)} onClose={handleSubMenuClose}>
+                <MenuItem onClick={handleLogPaymentClick}>Add Payment</MenuItem>
                 <MenuItem onClick={handleEditSubClick}>Edit</MenuItem>
                 <MenuItem onClick={handleDeleteSubscription}>Delete</MenuItem>
             </Menu>
