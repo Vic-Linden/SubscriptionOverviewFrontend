@@ -6,6 +6,7 @@ import DashboardPage from './features/dashboard/DashboardPage';
 import ProtectedRoutes from './routes/ProtectedRoutes';
 import AdminPage from './features/admin/AdminPage';
 import Layout from './components/Layout';
+import NotFoundPage from './features/notFound/NotFoundPage';
 
 function App() {
   return (
@@ -19,16 +20,15 @@ function App() {
           <ProtectedRoutes>
             <DashboardPage />
           </ProtectedRoutes>
-        }
-        />
+        }/>
         <Route
           path="/admin"
           element={
             <ProtectedRoutes requiredRole="Admin">
               <AdminPage />
             </ProtectedRoutes>
-          }
-        />
+          }/>
+          <Route path="*" element={<NotFoundPage />} />
       </Routes>
      </Layout> 
     </BrowserRouter>
