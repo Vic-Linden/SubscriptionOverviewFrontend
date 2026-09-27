@@ -80,17 +80,20 @@ function DashboardPage() {
     return (
         <Box sx={{ padding: 4 }}>
 
-            {/* TODO: move "Welcome, [displayUsername]" to right corner to match my Figma design*/}
-            <Typography variant="h4" component="span">Welcome {''}
-                {/*TODO: replace logout on click with a dropdown menu for "logout" option*/}
-                <Typography variant="h4" component="span" onClick={handleLogout}
-                    sx={{
-                        cursor: 'pointer',
-                        '&:hover': { color: 'primary.main' }
-                    }}>
-                    {username}
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 3 }}>
+                <Typography variant="body1">
+                    Welcome{' '}
+                    {/* TODO: replace logout on click with a dropdown menu for "logout" option */}
+                    <Typography
+                        variant="body1"
+                        component="span"
+                        onClick={handleLogout}
+                        sx={{ cursor: 'pointer', fontWeight: 500, '&:hover': { color: 'primary.main' } }}
+                    >
+                        {username}
+                    </Typography>
                 </Typography>
-            </Typography>
+            </Box>
 
             {/* The summary bar for monthly total, active subscription count, and top category */}
             <Grid container spacing={2} sx={{ marginTop: 2, backgroundColor: '#57565A', borderRadius: 2, padding: 2 }}>
@@ -147,7 +150,6 @@ function DashboardPage() {
                     </div>
                 </Grid>
             </Grid>
-
         </Box>
     );
 }
