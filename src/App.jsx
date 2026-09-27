@@ -4,6 +4,7 @@ import LoginPage from './features/auth/LoginPage';
 import RegisterPage from './features/auth/RegisterPage';
 import DashboardPage from './features/dashboard/DashboardPage';
 import ProtectedRoutes from './routes/ProtectedRoutes';
+import AdminPage from './features/admin/AdminPage';
 
 function App() {
   return (
@@ -17,6 +18,14 @@ function App() {
             <DashboardPage />
           </ProtectedRoutes>
         }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoutes requiredRole="Admin">
+              <AdminPage />
+            </ProtectedRoutes>
+          }
         />
       </Routes>
     </BrowserRouter>
