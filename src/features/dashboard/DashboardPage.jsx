@@ -108,42 +108,44 @@ function DashboardPage() {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={4} sx={{ marginTop: 4 }}>
-                {/* Donut chart showing total price per category, with a color-coded legend */}
-                <Grid size={5}>
-                    <PieChart width={250} height={250}>
-                        <Pie
-                            data={chartData}
-                            dataKey="value"
-                            nameKey="name"
-                            innerRadius={60}
-                            outerRadius={90}
-                        >
-                            {chartData.map((entry, index) => (
-                                <Cell key={entry.name} fill={chartColors[index % chartColors.length]} />
-                            ))}
-                        </Pie>
-                    </PieChart>
-
-                    {chartData.map((entry, index) => (
-                        <div key={entry.name} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <div
-                                style={{
-                                    width: 12,
-                                    height: 12,
-                                    backgroundColor: chartColors[index % chartColors.length],
-                                    borderRadius: 2,
-                                }}
-                            />
-                            <Typography variant="body2">{entry.name}</Typography>
-                        </div>
-                    ))}
-                </Grid>
-            </Grid>
-
             {/* Category list with grouped subscriptions, and the "New Subscription"/"New Category" buttons */}
             <Grid container spacing={4} sx={{ marginTop: 4 }}>
                 <SubscriptionList />
+
+                {/* Donut chart showing total price per category, with a color-coded legend */}
+                <Grid size={5}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                        <PieChart width={200} height={200}>
+                            <Pie
+                                data={chartData}
+                                dataKey="value"
+                                nameKey="name"
+                                innerRadius={50}
+                                outerRadius={80}
+                            >
+                                {chartData.map((entry, index) => (
+                                    <Cell key={entry.name} fill={chartColors[index % chartColors.length]} />
+                                ))}
+                            </Pie>
+                        </PieChart>
+
+                        <div>
+                            {chartData.map((entry, index) => (
+                                <div key={entry.name} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                                    <div
+                                        style={{
+                                            width: 12,
+                                            height: 12,
+                                            backgroundColor: chartColors[index % chartColors.length],
+                                            borderRadius: 2,
+                                        }}
+                                    />
+                                    <Typography variant="body2">{entry.name}</Typography>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </Grid>
             </Grid>
 
         </Box>
