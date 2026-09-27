@@ -10,7 +10,6 @@ import {
     MenuItem,
     Card
 } from '@mui/material';
-import bgImage from '../../assets/bg-mountain.avif';
 import { AuthContext } from '../auth/AuthContext';
 import SubscriptionList from '../subscriptions/SubscriptionList';
 import { getSubscriptions } from '../subscriptions/subscriptionApi';
@@ -95,7 +94,6 @@ function DashboardPage() {
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
-            backgroundImage: `url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             padding: 4,
@@ -132,17 +130,17 @@ function DashboardPage() {
 
                 {/* The summary bar for monthly total, active subscription count, and top category */}
                 <Grid container spacing={2} sx={{ marginTop: 2, backgroundColor: '#57565A', borderRadius: 2, padding: 2 }}>
-                    <Grid size={4} sx={{textAlign:'center'}}>
-                        <Typography variant="body2" sx={{color: 'white'}}>Monthly total</Typography>
-                        <Typography variant="h5" sx={{color: 'white'}}>{monthlyTotal} kr</Typography>
+                    <Grid size={{ xs: 12, sm: 4 }} sx={{ textAlign: 'center' }}>
+                        <Typography variant="body2" sx={{ color: 'white' }}>Monthly total</Typography>
+                        <Typography variant="h5" sx={{ color: 'white', fontSize: { xs: '1.1rem', sm: '1.5rem' } }}>{monthlyTotal} kr</Typography>
                     </Grid>
-                    <Grid size={4} sx={{textAlign:'center'}}>
-                        <Typography variant="body2" sx={{color: 'white'}}>Active subscriptions</Typography>
-                        <Typography variant="h5" sx={{color: 'white'}}>{activeCount}</Typography>
+                    <Grid size={{ xs: 12, sm: 4 }} sx={{ textAlign: 'center' }}>
+                        <Typography variant="body2" sx={{ color: 'white' }}>Active subscriptions</Typography>
+                        <Typography variant="h5" sx={{ color: 'white', fontSize: { xs: '1.1rem', sm: '1.5rem' } }}>{activeCount}</Typography>
                     </Grid>
-                    <Grid size={4} sx={{textAlign:'center'}}>
-                        <Typography variant="body2" sx={{color: 'white'}}>Top category</Typography>
-                        <Typography variant="h5" sx={{color: 'white'}}>{topCategory}</Typography>
+                    <Grid size={{ xs: 12, sm: 4 }} sx={{ textAlign: 'center' }}>
+                        <Typography variant="body2" sx={{ color: 'white' }}>Top category</Typography>
+                        <Typography variant="h5" sx={{ color: 'white', fontSize: { xs: '1.1rem', sm: '1.5rem' } }}>{topCategory}</Typography>
                     </Grid>
                 </Grid>
 
@@ -151,8 +149,8 @@ function DashboardPage() {
                     <SubscriptionList />
 
                     {/* Donut chart showing total price per category, with a color-coded legend */}
-                    <Grid size={5}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                    <Grid size={{ xs: 12, sm: 5 }} sx={{ order: { xs: -1, sm: 0 } }}>
+                        <Box sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' }, alignItems: 'center', gap: 2 }}>
                             <PieChart width={200} height={200}>
                                 <Pie
                                     data={chartData}
@@ -182,7 +180,7 @@ function DashboardPage() {
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </Box>
                     </Grid>
                 </Grid>
             </Card>

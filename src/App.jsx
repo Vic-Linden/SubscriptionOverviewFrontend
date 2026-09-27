@@ -5,11 +5,13 @@ import RegisterPage from './features/auth/RegisterPage';
 import DashboardPage from './features/dashboard/DashboardPage';
 import ProtectedRoutes from './routes/ProtectedRoutes';
 import AdminPage from './features/admin/AdminPage';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <BrowserRouter>
       <CssBaseline />
+      <Layout>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -28,6 +30,7 @@ function App() {
           }
         />
       </Routes>
+     </Layout> 
     </BrowserRouter>
   );
 }

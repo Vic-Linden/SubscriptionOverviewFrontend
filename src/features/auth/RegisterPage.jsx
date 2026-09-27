@@ -1,10 +1,9 @@
 import { useState, useContext } from 'react';
-import { Card, Typography, TextField, Button } from '@mui/material';
+import { Card, Typography, TextField, Button, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { register } from './authApi';
 import { AuthContext } from './AuthContext';
-import bgImage from '../../assets/bg-mountain.avif';
 
 function RegisterPage() {
     const [displayUsername, setDisplayUsername] = useState('');
@@ -28,14 +27,12 @@ function RegisterPage() {
         }
     };
     return (
-        <div style={{
+        <Box sx={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
-            backgroundImage: `url(${bgImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
+            padding: 2,
         }}>
             <Card elovation={3}
                 sx={{
@@ -87,7 +84,7 @@ function RegisterPage() {
                     </Typography>
                 </form>
             </Card>
-        </div>
+        </Box>
     );
 }
 export default RegisterPage;
