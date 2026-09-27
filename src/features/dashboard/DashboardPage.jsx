@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { PieChart, Pie, Cell } from 'recharts';
 import {
     Typography,
     Box,
@@ -10,12 +11,14 @@ import {
 import { AuthContext } from '../auth/AuthContext';
 import SubscriptionList from '../subscriptions/SubscriptionList';
 import { getSubscriptions } from '../subscriptions/subscriptionApi';
+import { getCategories } from '../categories/CategoryApi';
 
 function DashboardPage() {
     const { token, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [subscriptions, setSubscriptions] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const decoded = token ? jwtDecode(token) : null;
     const username = decoded?.username || 'User';
@@ -31,6 +34,17 @@ function DashboardPage() {
         getSubscriptions()
             .then((data) => setSubscriptions(data))
             .catch(() => setSubscriptions([]));
+    }, []);
+
+    // Fetches all subscriptions and categories once, used for the summary and the donut chart.
+    useEffect(() => {
+        getSubscriptions()
+            .then((data) => setSubscriptions(data))
+            .catch(() => setSubscriptions([]));
+
+        getCategories()
+            .then((data) => setCategories(data))
+            .catch(() => setCategories([]));
     }, []);
 
     // Adds up the price of all subscriptions.
