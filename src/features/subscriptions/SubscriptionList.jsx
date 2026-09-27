@@ -169,18 +169,22 @@ function SubscriptionList() {
                         (subscription) => subscription.categoryName === category.name
                     );
 
+                    const categoryTotal = categorySubscriptions.reduce((sum, sub) => sum + sub.price, 0);
+
                     return (
                         <div key={category.id}>
-                            <Typography variant="body1"
+                            <Typography
+                                variant="body1"
                                 onClick={(e) => handleRowClick(e, category)}
                                 sx={{
                                     fontWeight: 500,
                                     marginTop: 3,
                                     marginBottom: 1,
                                     cursor: 'pointer',
-                                    '&:hover': { color: 'primary.main' }
-                                }}>
-                                {category.name}
+                                    '&:hover': { color: 'primary.main' },
+                                }}
+                            >
+                                {category.name} — {categoryTotal} kr
                             </Typography>
 
                             {categorySubscriptions.map((subscription) => (
@@ -194,7 +198,7 @@ function SubscriptionList() {
                                         '&:hover': { color: 'primary.main' },
                                     }}
                                 >
-                                    {subscription.name} — {subscription.price} kr
+                                    {subscription.name} — {subscription.price} kr / {subscription.billingInterval === 0 ? 'month' : 'year'}
                                 </Typography>
                             ))}
                         </div>
