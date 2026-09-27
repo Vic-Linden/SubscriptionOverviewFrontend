@@ -5,6 +5,7 @@ import RegisterPage from './features/auth/RegisterPage';
 import DashboardPage from './features/dashboard/DashboardPage';
 import ProtectedRoutes from './routes/ProtectedRoutes';
 import AdminPage from './features/admin/AdminPage';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }
