@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { Card, Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 import { login } from './authApi';
 import { AuthContext } from './AuthContext';
@@ -21,11 +22,20 @@ function LoginPage() {
         try {
             const data = await login(email, password);
             loginUser(data.token);
-            navigate('/dashboard');
+
+            const decoded = jwtDecode(data.token);
+            const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+            if (role === 'Admin') {
+                navigate('/admin');
+            } else {
+                navigate('/dashboard');
+            }
         } catch {
             setError('Invalid email or password');
         }
     };
+
     return (
         <div style={{
             display: 'flex',
@@ -35,7 +45,6 @@ function LoginPage() {
             backgroundImage: `url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-
         }}>
             <Card elovation={3}
                 sx={{
