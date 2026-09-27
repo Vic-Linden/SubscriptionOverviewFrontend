@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Grid, Card, Avatar } from '@mui/material';
+import bgImage from '../../assets/bg-mountain.avif';
 import { getAllUsers } from './adminApi';
 import { AuthContext } from '../auth/AuthContext';
 
@@ -31,7 +32,26 @@ function AdminPage() {
     );
 
     return (
-        <Box sx={{ padding: 4 }}>
+    <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        padding: 4,
+    }}>
+        <Card sx={{
+            maxWidth: 900,
+            width: '100%',
+            padding: 4,
+            borderRadius: 3,
+            background: 'rgba(255, 255, 255, 0.6)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.08)',
+        }}>
+
             <Typography
                 variant="h4"
                 onClick={handleLogout}
@@ -64,8 +84,9 @@ function AdminPage() {
                     </Grid>
                 ))}
             </Grid>
-        </Box>
-    );
+        </Card>
+    </Box>
+);
 }
 
 export default AdminPage;
