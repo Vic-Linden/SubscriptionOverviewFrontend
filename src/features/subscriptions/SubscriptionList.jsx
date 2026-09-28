@@ -20,19 +20,18 @@ import { getCategories, createCategory, updateCategory, deleteCategory } from '.
 import { createPayment } from '../payments/paymentApi';
 
 function SubscriptionList() {
+    // Data from the backend.
     const [subscriptions, setSubscriptions] = useState([]);
     const [categories, setCategories] = useState([]);
+
+    // Create subscription.
     const [openDialog, setOpenDialog] = useState(false);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [billingInterval, setBillingInterval] = useState(0);
     const [categoryId, setCategoryId] = useState('');
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [openEditDialog, setOpenEditDialog] = useState(false);
-    const [editCategoryName, setEditCategoryName] = useState('');
-    const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
-    const [newCategoryName, setNewCategoryName] = useState('');
+
+    // Edit and delete subscription.
     const [anchorElSub, setAnchorElSub] = useState(null);
     const [selectedSubscription, setSelectedSubscription] = useState(null);
     const [openEditSubDialog, setOpenEditSubDialog] = useState(false);
@@ -40,7 +39,18 @@ function SubscriptionList() {
     const [editPrice, setEditPrice] = useState('');
     const [editBillingInterval, setEditBillingInterval] = useState(0);
     const [editCategoryId, setEditCategoryId] = useState('');
-    // Payments
+
+    // Create category.
+    const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
+
+    // Edit and delete category.
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [editCategoryName, setEditCategoryName] = useState('');
+
+    // Payments.
     const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
     const [paymentAmount, setPaymentAmount] = useState('');
     const [paymentDate, setPaymentDate] = useState('');

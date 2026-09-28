@@ -34,7 +34,7 @@ function RegisterPage() {
             minHeight: '100vh',
             padding: 2,
         }}>
-            <Card elovation={3}
+            <Card elevation={3}
                 sx={{
                     maxWidth: 400,
                     padding: 4,
