@@ -40,13 +40,6 @@ function DashboardPage() {
         setAnchorElUser(null);
     };
 
-    // Fetches all subscriptions once, used to calculate the summary stats
-    useEffect(() => {
-        getSubscriptions()
-            .then((data) => setSubscriptions(data))
-            .catch(() => setSubscriptions([]));
-    }, []);
-
     // Fetches all subscriptions and categories once, used for the summary and the donut chart.
     useEffect(() => {
         getSubscriptions()
@@ -93,7 +86,7 @@ function DashboardPage() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            minHeight: '100vh',
+            minHeight: { xs: 'calc(100vh - 40px)', sm: '100vh' },
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             padding: 4,

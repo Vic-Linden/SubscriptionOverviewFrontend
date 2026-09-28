@@ -60,7 +60,7 @@ function LoginPage() {
                 Your Subscription Overview
             </Typography>
 
-            <Card elovation={3}
+            <Card elevation={3}
                 sx={{
                     maxWidth: 400,
                     padding: 4,
