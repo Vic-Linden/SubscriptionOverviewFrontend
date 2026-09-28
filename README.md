@@ -1,16 +1,58 @@
-# React + Vite
+# School project (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This web app gives users an overview of their subscriptions. This is the frontend. The backend is in a separate repository: [SubscriptionOverviewBackend](https://github.com/Vic-Linden/SubscriptionOverview).
 
-Currently, two official plugins are available:
+## About the project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This was an individual assignment in my **fullstack .NET education**. The goal was to build and deploy a complete web application, with a backend API, a database and a frontend.
 
-## React Compiler
+**What the assignment required:**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- A **REST API** with full CRUD, built with **ASP.NET Core** and **Entity Framework Core**.
+- Authentication and authorization with **JWT** and roles.
+- A React frontend that talks to the API, with protected routes.
+- A responsive design and a custom 404 page.
+- Deployment to **Azure**, with configuration kept out of the code.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## My design in Figma
+
+<p>
+  <img width="49%" alt="login-mockup" src="https://github.com/user-attachments/assets/5606c7a0-967d-4bd5-9d8c-07fbd33f18aa" />
+  <img width="49%" alt="dashboard-mockup" src="https://github.com/user-attachments/assets/06c34063-9f4e-4b74-8030-2248fab31813" />
+</p>
+
+## Result
+
+<p>
+  <img width="49%" alt="login-new" src="https://github.com/user-attachments/assets/168c9656-cce2-43f8-a601-1e6d79e21f92" />
+  <img width="49%" alt="dashboard" src="https://github.com/user-attachments/assets/25d53c9f-b5cc-4925-88bf-f779f3b96eb8" />
+</p>
+
+
+## Tech stack
+
+- React with Vite
+- Material UI
+- React Router
+- Axios
+- Recharts
+- JWT authentication *(decoded with jwt-decode)*
+- Hosted on Azure
+
+## Features
+
+- Register and log in
+- Add, edit and delete subscriptions and categories
+- Log payments for a subscription
+- Summary bar with monthly total, active subscriptions and top category
+- Donut chart showing the price per category
+- Admin page for viewing all users, only available to the Admin role
+- Responsive design for mobile and desktop
+- Custom 404 page
+
+## Run locally
+
+1. Clone the repo and run `npm install`
+2. Create a `.env.development` file with `VITE_API_URL=http://localhost:5044/api`
+3. Start the backend, then run `npm run dev`
