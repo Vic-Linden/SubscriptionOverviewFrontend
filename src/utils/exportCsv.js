@@ -9,5 +9,13 @@ export const exportSubscriptionsToCsv = (subscriptions) => {
 
     const csvText = [title, ...rows].join('\n');
 
-    console.log(csvText);
+    const blob = new Blob(['\uFEFF' + csvText], {type: 'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'subscriptions.csv';
+    link.click();
+
+    URL.revokeObjectURL(url);
 };
