@@ -265,6 +265,7 @@ function SubscriptionList() {
                         marginTop: 4,
                         textTransform: 'none',
                         fontSize: '1rem',
+                        display: {xs: 'none', sm: 'inline-flex'},
                         backgroundColor: { xs: 'white', sm: 'transparent' },
                         border: { xs: '1px solid rgba(0, 0, 0, 0.1)', sm: 'none' },
                     }}
