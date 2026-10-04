@@ -18,6 +18,7 @@ import {
 import { getSubscriptions, createSubscription, updateSubscription, deleteSubscription } from './subscriptionApi';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '../categories/CategoryApi';
 import { createPayment } from '../payments/paymentApi';
+import {exportSubscriptionsToCsv} from '../../utils/exportCsv';
 
 function SubscriptionList() {
     // Data from the backend.
@@ -256,6 +257,21 @@ function SubscriptionList() {
                     onClick={() => setOpenCategoryDialog(true)}
                 >
                     + New Category
+                </Button>
+
+                <Button
+                    variant="text"
+                    sx={{
+                        marginTop: 4,
+                        textTransform: 'none',
+                        fontSize: '1rem',
+                        display: {xs: 'none', sm: 'inline-flex'},
+                        backgroundColor: { xs: 'white', sm: 'transparent' },
+                        border: { xs: '1px solid rgba(0, 0, 0, 0.1)', sm: 'none' },
+                    }}
+                    onClick={() => exportSubscriptionsToCsv(subscriptions)}
+                >
+                    + Export to CSV
                 </Button>
             </Box>
 
